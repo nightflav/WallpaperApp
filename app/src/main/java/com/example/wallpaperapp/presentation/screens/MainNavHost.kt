@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,10 +16,8 @@ import androidx.navigation.navArgument
 import com.example.wallpaperapp.di.AppComponent
 import com.example.wallpaperapp.presentation.Destinations
 import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageScreen
-import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageViewModel
 import com.example.wallpaperapp.presentation.screens.categoryscreen.CategoryScreen
 import com.example.wallpaperapp.presentation.screens.imagesscreen.ImagesScreen
-import com.example.wallpaperapp.presentation.screens.imagesscreen.ImagesViewModel
 
 @Composable
 fun MainNavHost(
@@ -26,17 +26,18 @@ fun MainNavHost(
     appComponent: AppComponent,
     context: Context,
     dataStore: DataStore<Preferences>,
-    currTheme: Boolean
+    currTheme: Boolean,
 ) {
     NavHost(
         modifier = modifier.fillMaxSize(),
         navController = navController,
         startDestination = Destinations.CategoryScreen.route
     ) {
+
         composable(route = Destinations.CategoryScreen.route) {
-            val viewModel = appComponent.categoriesComponent.create().categoriesViewModel
+            val categoriesComponent = appComponent.categoriesComponent.create()
             CategoryScreen(
-                viewModel = viewModel,
+                viewModel = daggerViewModel { categoriesComponent.categoriesViewModel },
                 navController = navController
             )
         }
@@ -49,12 +50,12 @@ fun MainNavHost(
                 }
             )
         ) {
-            val viewModel = appComponent.imagesComponent.create().imagesViewModel
             val categoryId = it.arguments?.getString("id")!!
-            viewModel.sendEvent(ImagesViewModel.ImagesScreenEvents.LoadImages(categoryId))
+            val imagesComponent = appComponent.imagesComponent.create(categoryId)
             ImagesScreen(
-                viewModel = viewModel,
-                categoryId = categoryId,
+                viewModel = daggerViewModel {
+                    imagesComponent.imagesViewModel
+                },
                 navController = navController
             )
         }
@@ -67,12 +68,13 @@ fun MainNavHost(
                 }
             )
         ) {
-            val viewModel = appComponent.bigImageComponent.create(context).bigImageViewModel
             val imageId = it.arguments?.getString("id")!!
-            viewModel.sendEvent(BigImageViewModel.ImageScreenEvents.LoadImage(imageId))
+            val bigImageComponent = appComponent.bigImageComponent.create(context, imageId)
+
             BigImageScreen(
-                imageId = imageId,
-                viewModel = viewModel,
+                viewModel = daggerViewModel {
+                    bigImageComponent.bigImageViewModel
+                },
                 navController = navController
             )
         }
@@ -84,3 +86,19 @@ fun MainNavHost(
         }
     }
 }
+
+@Suppress("UNCHECKED_CAST")
+@Composable
+private inline fun <reified T : ViewModel> daggerViewModel(
+    key: String? = null,
+    crossinline viewModelInstanceCreator: () -> T
+): T =
+    androidx.lifecycle.viewmodel.compose.viewModel(
+        modelClass = T::class.java,
+        key = key,
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return viewModelInstanceCreator() as T
+            }
+        }
+    )

@@ -30,7 +30,6 @@ import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageView
 @Composable
 fun BigImageScreen(
     modifier: Modifier = Modifier,
-    imageId: String,
     viewModel: BigImageViewModel,
     navController: NavHostController
 ) {
@@ -39,9 +38,7 @@ fun BigImageScreen(
         state.isLoading -> LoadingScreen()
         state.error != null -> ErrorScreen(state.error!!) {
             viewModel.sendEvent(
-                LoadImage(
-                    id = imageId
-                )
+                LoadImage
             )
         }
 

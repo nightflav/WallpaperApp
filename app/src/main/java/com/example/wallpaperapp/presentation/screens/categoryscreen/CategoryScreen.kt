@@ -32,6 +32,7 @@ import com.example.wallpaperapp.data.uimodel.CategoryItem
 import com.example.wallpaperapp.presentation.Destinations
 import com.example.wallpaperapp.presentation.screens.ErrorScreen
 import com.example.wallpaperapp.presentation.screens.LoadingScreen
+import com.example.wallpaperapp.presentation.screens.favandload.FavouritesAndLoadedImages
 import com.example.wallpaperapp.util.fadingEdge
 
 @Composable
@@ -116,13 +117,13 @@ private fun CategoriesGrid(
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item {
-            //FavouritesAndLoadedImages()
+            FavouritesAndLoadedImages()
         }
         itemsIndexed(
             items = categories,

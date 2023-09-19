@@ -1,7 +1,9 @@
 package com.example.wallpaperapp.presentation.screens.bigimagescreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wallpaperapp.di.qualifiers.ImageIdQualifier
 import com.example.wallpaperapp.domain.usecase.bigimage.InstallImageAsWallpaper
 import com.example.wallpaperapp.domain.usecase.bigimage.LoadImage
 import com.example.wallpaperapp.util.Resource
@@ -12,15 +14,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class BigImageViewModel @Inject constructor(
+    @ImageIdQualifier private val imageId: String,
     private val installImageAsWallpaper: InstallImageAsWallpaper,
-    private val loadImage: LoadImage
+    private val loadImage: LoadImage,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(BigImageScreenState())
     val state = _state.asStateFlow()
 
+    init {
+        Log.d("TAGTAG", "Big Image VM created")
+        sendEvent(ImageScreenEvents.LoadImage)
+    }
+
     sealed class ImageScreenEvents {
-        data class LoadImage(val id: String) : ImageScreenEvents()
+        data object LoadImage : ImageScreenEvents()
         data class InstallAsWallpaper(val type: Int) : ImageScreenEvents()
     }
 
@@ -28,7 +36,7 @@ class BigImageViewModel @Inject constructor(
         viewModelScope.launch {
             when (e) {
                 is ImageScreenEvents.InstallAsWallpaper -> installImageAsWallpaper(e.type)
-                is ImageScreenEvents.LoadImage -> loadImage(e.id)
+                is ImageScreenEvents.LoadImage -> loadImage()
             }
         }
     }
@@ -39,7 +47,7 @@ class BigImageViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadImage(id: String) {
+    private suspend fun loadImage(id: String = imageId) {
         viewModelScope.launch {
             loadImage.invoke(imageId = id).collect {
                 when (it) {

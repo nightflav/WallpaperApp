@@ -2,13 +2,16 @@ package com.example.wallpaperapp.di
 
 import com.example.wallpaperapp.di.modules.DataModule
 import com.example.wallpaperapp.di.modules.NetworkModule
+import com.example.wallpaperapp.di.modules.ViewModelModule
 import com.example.wallpaperapp.di.subcomponents.categories.CategoriesSubcomponent
 import com.example.wallpaperapp.di.subcomponents.images.BigImageSubcomponent
 import com.example.wallpaperapp.di.subcomponents.images.ImagesSubcomponent
 import dagger.Component
 
 @ApplicationScope
-@Component(modules = [NetworkModule::class, DataModule::class])
+@Component(
+    modules = [NetworkModule::class, DataModule::class, ViewModelModule::class]
+)
 interface AppComponent {
 
     val categoriesComponent: CategoriesSubcomponent.Factory

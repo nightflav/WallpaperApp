@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.compose.AppTheme
 import com.example.wallpaperapp.core.BaseApp
 import com.example.wallpaperapp.presentation.screens.MainNavHost
+import com.example.wallpaperapp.presentation.ui.theme.AppTheme
 import com.example.wallpaperapp.util.THEME
 import com.example.wallpaperapp.util.dataStore
 import kotlinx.coroutines.flow.map

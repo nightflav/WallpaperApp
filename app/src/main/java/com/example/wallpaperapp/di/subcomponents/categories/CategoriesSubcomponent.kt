@@ -7,6 +7,7 @@ import dagger.Subcomponent
 @Subcomponent
 interface CategoriesSubcomponent {
 
+    @CategoryScope
     val categoriesViewModel: CategoryScreenViewModel
 
     @Subcomponent.Factory

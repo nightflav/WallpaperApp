@@ -1,5 +1,6 @@
 package com.example.wallpaperapp.presentation.screens.categoryscreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallpaperapp.domain.usecase.category.LoadCategoriesUseCase
@@ -22,6 +23,7 @@ class CategoryScreenViewModel @Inject constructor(
     val state: StateFlow<CategoryScreenState> = _state.asStateFlow()
 
     init {
+        Log.d("TAGTAG", "Category VM Created")
         sendEvent(CategoryScreenEvent.LoadCategories)
     }
 

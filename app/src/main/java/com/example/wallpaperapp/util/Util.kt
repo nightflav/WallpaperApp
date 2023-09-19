@@ -3,9 +3,15 @@ package com.example.wallpaperapp.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.WindowManager
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 
 const val THEME = "theme"
 
@@ -47,3 +53,18 @@ fun Bitmap.cropBitmapFromCenterAndScreenSize(context: Context): Bitmap {
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+@Suppress("UNCHECKED_CAST")
+@Composable
+internal inline fun <reified T : ViewModel> NavHostController.viewModelFromHolder(
+    holderRoute: String,
+    crossinline viewModelInstanceCreator: () -> T
+) = viewModel(
+    modelClass = T::class.java,
+    viewModelStoreOwner = remember { this.getBackStackEntry(holderRoute) },
+    factory = object : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return viewModelInstanceCreator() as T
+        }
+    }
+)

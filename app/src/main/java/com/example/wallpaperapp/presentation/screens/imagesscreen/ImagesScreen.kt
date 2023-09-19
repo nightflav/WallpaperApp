@@ -32,7 +32,6 @@ import com.example.wallpaperapp.util.fadingEdge
 fun ImagesScreen(
     modifier: Modifier = Modifier,
     viewModel: ImagesViewModel,
-    categoryId: String,
     navController: NavHostController
 ) {
     val topFade = Brush.verticalGradient(
@@ -43,7 +42,7 @@ fun ImagesScreen(
     when {
         state.isLoading -> LoadingScreen()
         state.error != null -> ErrorScreen(e = state.error!!) {
-            viewModel.sendEvent(ImagesViewModel.ImagesScreenEvents.LoadImages(categoryId))
+            viewModel.sendEvent(ImagesViewModel.ImagesScreenEvents.LoadImages)
         }
     }
     Column(

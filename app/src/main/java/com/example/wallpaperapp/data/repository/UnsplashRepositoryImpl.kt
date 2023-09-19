@@ -16,28 +16,24 @@ class UnsplashRepositoryImpl @Inject constructor(
     private val unsplashApi: UnsplashApi
 ) : UnsplashRepository {
 
-    private var repoCategoryCache: List<CategoryDto> = emptyList()
-    private var repoPhotoCache: List<PhotoDto> = emptyList()
-
     override fun getCategories(
         page: Int, perPage: Int
     ): Flow<Resource<List<CategoryDto>>> = flow {
-        emit(Resource.Loading(repoCategoryCache))
+        emit(Resource.Loading(null))
         try {
             val networkCategories = unsplashApi.getCategories(page, perPage)
             if (networkCategories.isSuccessful) {
-                repoCategoryCache = networkCategories.body()!!.categoryDtoList
-                emit(Resource.Success(repoCategoryCache))
+                emit(Resource.Success(networkCategories.body()!!.categoryDtoList))
             } else {
                 emit(
                     Resource.Error(
-                        Throwable(networkCategories.message()), repoCategoryCache
+                        Throwable(networkCategories.message()), null
                     )
                 )
             }
         } catch (e: Exception) {
             emit(
-                Resource.Error(e, repoCategoryCache)
+                Resource.Error(e, null)
             )
         }
     }
@@ -45,21 +41,20 @@ class UnsplashRepositoryImpl @Inject constructor(
     override fun getCategoryPhotos(
         categoryId: String, page: Int, perPage: Int
     ): Flow<Resource<List<PhotoDto>>> = flow {
-        emit(Resource.Loading(repoPhotoCache))
+        emit(Resource.Loading(null))
         try {
             val networkPhotos = unsplashApi.getPhotosByCategory(categoryId, page, perPage)
             if (networkPhotos.isSuccessful) {
-                repoPhotoCache = networkPhotos.body()!!.photoDtoList
-                emit(Resource.Success(repoPhotoCache))
+                emit(Resource.Success(networkPhotos.body()!!.photoDtoList))
             } else {
                 emit(
                     Resource.Error(
-                        Throwable(message = networkPhotos.message()), repoPhotoCache
+                        Throwable(message = networkPhotos.message()), null
                     )
                 )
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e, repoPhotoCache))
+            emit(Resource.Error(e, null))
         }
     }
 

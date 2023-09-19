@@ -5,6 +5,9 @@ import com.example.wallpaperapp.data.network.UnsplashApi
 import com.example.wallpaperapp.di.ApplicationScope
 import com.example.wallpaperapp.di.qualifiers.AccessKeyQualifier
 import com.example.wallpaperapp.di.qualifiers.BaseUrlQualifier
+import com.example.wallpaperapp.di.subcomponents.categories.CategoriesSubcomponent
+import com.example.wallpaperapp.di.subcomponents.images.BigImageSubcomponent
+import com.example.wallpaperapp.di.subcomponents.images.ImagesSubcomponent
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -14,7 +17,10 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 
-@Module
+@Module(
+    subcomponents =
+    [BigImageSubcomponent::class, ImagesSubcomponent::class, CategoriesSubcomponent::class]
+)
 class NetworkModule {
 
     @BaseUrlQualifier
