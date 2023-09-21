@@ -1,15 +1,15 @@
 package com.example.wallpaperapp.domain.usecase.images
 
-import com.example.wallpaperapp.data.uimodel.PhotoItem
-import com.example.wallpaperapp.domain.repository.UnsplashRepository
-import com.example.wallpaperapp.util.Resource
-import com.example.wallpaperapp.util.photoItemList
+import com.example.wallpaperapp.presentation.model.uimodel.PhotoItem
+import com.example.wallpaperapp.domain.repository.ImagesRepository
+import com.example.wallpaperapp.core.util.Resource
+import com.example.wallpaperapp.core.util.photoItemList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LoadImagesUseCase @Inject constructor(
-    private val repo: UnsplashRepository
+    private val repo: ImagesRepository
 ) {
 
     operator fun invoke(id: String, page: Int, perPage: Int): Flow<Resource<List<PhotoItem>>> =

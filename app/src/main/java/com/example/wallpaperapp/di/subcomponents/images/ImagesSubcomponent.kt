@@ -17,7 +17,7 @@ interface ImagesSubcomponent {
         fun create(
             @CategoryIdQualifier
             @BindsInstance
-            categoryId: String
+            categoryId: String,
         ): ImagesSubcomponent
     }
 

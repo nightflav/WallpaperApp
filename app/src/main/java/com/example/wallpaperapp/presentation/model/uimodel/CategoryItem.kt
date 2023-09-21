@@ -1,4 +1,4 @@
-package com.example.wallpaperapp.data.uimodel
+package com.example.wallpaperapp.presentation.model.uimodel
 
 data class CategoryItem(
     val id: String,

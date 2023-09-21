@@ -1,4 +1,4 @@
-package com.example.wallpaperapp.util
+package com.example.wallpaperapp.core.util
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent

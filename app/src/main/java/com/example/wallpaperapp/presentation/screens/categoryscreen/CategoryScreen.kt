@@ -28,12 +28,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.wallpaperapp.data.uimodel.CategoryItem
+import com.example.wallpaperapp.core.util.fadingEdge
 import com.example.wallpaperapp.presentation.Destinations
+import com.example.wallpaperapp.presentation.model.uimodel.CategoryItem
 import com.example.wallpaperapp.presentation.screens.ErrorScreen
 import com.example.wallpaperapp.presentation.screens.LoadingScreen
 import com.example.wallpaperapp.presentation.screens.favandload.FavouritesAndLoadedImages
-import com.example.wallpaperapp.util.fadingEdge
 
 @Composable
 fun CategoryScreen(
@@ -62,7 +62,19 @@ fun CategoryScreen(
                         route = Destinations.SettingsScreen.route
                     )
             },
-            categories = state.categories
+            categories = state.categories,
+            onFavClickListener = {
+                if (navController.currentDestination?.route != Destinations.FavouritesScreen.route)
+                    navController.navigate(
+                        route = Destinations.FavouritesScreen.route
+                    )
+            },
+            onLoadedClickListener = {
+                if (navController.currentDestination?.route != Destinations.LoadedScreen.route)
+                    navController.navigate(
+                        route = Destinations.LoadedScreen.route
+                    )
+            }
         )
     }
 }
@@ -72,6 +84,8 @@ fun SuccessfulScreen(
     modifier: Modifier = Modifier,
     onCategorySelectedListener: (String) -> Unit,
     onNavigateToSettingsScreen: () -> Unit,
+    onFavClickListener: () -> Unit,
+    onLoadedClickListener: () -> Unit,
     categories: List<CategoryItem>
 ) {
     val topFade = Brush.verticalGradient(
@@ -105,6 +119,8 @@ fun SuccessfulScreen(
             modifier = modifier.fadingEdge(topFade),
             categories = categories,
             onCategorySelectedListener = onCategorySelectedListener,
+            onFavClickListener = onFavClickListener,
+            onLoadedClickListener = onLoadedClickListener
         )
     }
 }
@@ -113,7 +129,9 @@ fun SuccessfulScreen(
 private fun CategoriesGrid(
     modifier: Modifier = Modifier,
     categories: List<CategoryItem>,
-    onCategorySelectedListener: (String) -> Unit
+    onCategorySelectedListener: (String) -> Unit,
+    onFavClickListener: () -> Unit,
+    onLoadedClickListener: () -> Unit
 ) {
     LazyVerticalGrid(
         modifier = modifier,
@@ -123,7 +141,10 @@ private fun CategoriesGrid(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item {
-            FavouritesAndLoadedImages()
+            FavouritesAndLoadedImages(
+                onFavouriteClickListener = onFavClickListener,
+                onLoadedClickListener = onLoadedClickListener
+            )
         }
         itemsIndexed(
             items = categories,
@@ -172,6 +193,8 @@ private fun CategoryScreenPreview() {
                 description = "Long long description"
             )
         ),
+        {},
+        {}
     )
     {}
 }

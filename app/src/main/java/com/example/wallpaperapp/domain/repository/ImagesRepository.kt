@@ -1,11 +1,11 @@
 package com.example.wallpaperapp.domain.repository
 
+import com.example.wallpaperapp.core.util.Resource
 import com.example.wallpaperapp.data.dto.CategoryDto
 import com.example.wallpaperapp.data.dto.PhotoDto
-import com.example.wallpaperapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 
-interface UnsplashRepository {
+interface ImagesRepository {
 
     fun getCategories(page: Int = 1, perPage: Int = 20): Flow<Resource<List<CategoryDto>>>
 
@@ -18,5 +18,17 @@ interface UnsplashRepository {
     fun getPhotoById(
         id: String,
     ): Flow<Resource<PhotoDto>>
+
+    suspend fun addLikedImage(id: String)
+
+    suspend fun addLoadedImage(id: String, path: String)
+
+    fun getLikedImages(): Flow<List<PhotoDto>>
+
+    fun getLoadedImages(): Flow<List<PhotoDto>>
+
+    suspend fun removeLikedImage(id: String)
+
+    suspend fun deletePhotoFromDevice(id: String)
 
 }

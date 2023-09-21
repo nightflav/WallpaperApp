@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallpaperapp.di.qualifiers.CategoryIdQualifier
 import com.example.wallpaperapp.domain.usecase.images.LoadImagesUseCase
-import com.example.wallpaperapp.util.Resource
+import com.example.wallpaperapp.core.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

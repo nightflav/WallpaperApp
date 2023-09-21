@@ -6,8 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
@@ -20,12 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.wallpaperapp.presentation.screens.ErrorScreen
 import com.example.wallpaperapp.presentation.screens.LoadingScreen
+import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageViewModel.ImageScreenEvents.AddToFavourite
 import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageViewModel.ImageScreenEvents.InstallAsWallpaper
 import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageViewModel.ImageScreenEvents.LoadImage
+import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageViewModel.ImageScreenEvents.LoadToDevice
 
 @Composable
 fun BigImageScreen(
@@ -46,7 +47,9 @@ fun BigImageScreen(
             modifier = modifier,
             image = state.image!!,
             onInstallImageAsWallpaper = { viewModel.sendEvent(InstallAsWallpaper(it)) },
-            onCancelButtonClickListener = { navController.popBackStack() }
+            onCancelButtonClickListener = { navController.popBackStack() },
+            addToFavouriteClickListener = { viewModel.sendEvent(AddToFavourite) },
+            loadImageClickListener = { viewModel.sendEvent(LoadToDevice) }
         )
     }
 }
@@ -56,7 +59,9 @@ fun BigImage(
     modifier: Modifier = Modifier,
     image: Bitmap,
     onInstallImageAsWallpaper: (Int) -> Unit,
-    onCancelButtonClickListener: () -> Unit
+    onCancelButtonClickListener: () -> Unit,
+    addToFavouriteClickListener: () -> Unit,
+    loadImageClickListener: () -> Unit
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -68,36 +73,54 @@ fun BigImage(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
         )
-        Row(
+        Column(
             modifier = Modifier
-                .background(
-                    MaterialTheme.colorScheme.tertiaryContainer.copy(
-                        alpha = 0.5f
-                    )
-                )
+                .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth(),
-            Arrangement.spacedBy(4.dp)
         ) {
-            Spacer(modifier = Modifier.weight(0.05f))
-            Button(
-                onClick = { onInstallImageAsWallpaper(WallpaperManager.FLAG_SYSTEM) },
-                modifier = Modifier.weight(1f)
+            Row(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.tertiaryContainer.copy(
+                            alpha = 0.5f
+                        )
+                    )
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "Install as wallpaper")
+                Button(
+                    onClick = { onInstallImageAsWallpaper(WallpaperManager.FLAG_SYSTEM) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Install as wallpaper")
+                }
+                Button(
+                    onClick = { onInstallImageAsWallpaper(WallpaperManager.FLAG_LOCK) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Install as lock")
+                }
             }
-            Spacer(modifier = Modifier.weight(0.05f))
-            Button(
-                onClick = { onInstallImageAsWallpaper(WallpaperManager.FLAG_LOCK) },
-                modifier = Modifier.weight(1f)
+            Row(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.tertiaryContainer.copy(
+                            alpha = 0.5f
+                        )
+                    )
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "Install as lock")
+                Button(onClick = addToFavouriteClickListener) {
+                    Text(text = "Add to favourite")
+                }
+                Button(onClick = loadImageClickListener) {
+                    Text(text = "Save to device")
+                }
+                Button(onClick = onCancelButtonClickListener) {
+                    Text(text = "Cancel")
+                }
             }
-            Spacer(modifier = Modifier.weight(0.05f))
-            Button(onClick = onCancelButtonClickListener, modifier = Modifier.weight(1f)) {
-                Text(text = "Cancel")
-            }
-            Spacer(modifier = Modifier.weight(0.05f))
         }
     }
 }

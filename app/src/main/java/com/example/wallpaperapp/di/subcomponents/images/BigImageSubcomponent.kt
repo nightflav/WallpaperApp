@@ -1,6 +1,7 @@
 package com.example.wallpaperapp.di.subcomponents.images
 
-import android.content.Context
+import android.app.Application
+import com.example.wallpaperapp.di.qualifiers.BigImageAppQ
 import com.example.wallpaperapp.di.qualifiers.ImageIdQualifier
 import com.example.wallpaperapp.presentation.screens.bigimagescreen.BigImageViewModel
 import dagger.BindsInstance
@@ -17,7 +18,8 @@ interface BigImageSubcomponent {
     interface Factory {
         fun create(
             @BindsInstance
-            context: Context,
+            @BigImageAppQ
+            application: Application,
             @BindsInstance
             @ImageIdQualifier
             imageId: String

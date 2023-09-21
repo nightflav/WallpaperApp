@@ -1,19 +1,44 @@
-package com.example.wallpaperapp.util
+package com.example.wallpaperapp.core.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Environment
 import android.view.WindowManager
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 const val THEME = "theme"
+
+const val FOLDER = "saved_images"
+
+fun Bitmap.saveImage(name: String): String? {
+    var savedImagePath: String? = null
+    val imageFileName = "JPEG_$name.jpg"
+    val storageDir = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            .toString() + "/$FOLDER"
+    )
+    var success = true
+    if (!storageDir.exists()) {
+        success = storageDir.mkdirs()
+    }
+    if (success) {
+        val imageFile = File(storageDir, imageFileName)
+        savedImagePath = imageFile.getAbsolutePath()
+        try {
+            val fOut: OutputStream = FileOutputStream(imageFile)
+            compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+            fOut.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    return savedImagePath
+}
 
 fun Bitmap.cropBitmapFromCenterAndScreenSize(context: Context): Bitmap {
     var bitmap = this
@@ -53,18 +78,3 @@ fun Bitmap.cropBitmapFromCenterAndScreenSize(context: Context): Bitmap {
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
-@Suppress("UNCHECKED_CAST")
-@Composable
-internal inline fun <reified T : ViewModel> NavHostController.viewModelFromHolder(
-    holderRoute: String,
-    crossinline viewModelInstanceCreator: () -> T
-) = viewModel(
-    modelClass = T::class.java,
-    viewModelStoreOwner = remember { this.getBackStackEntry(holderRoute) },
-    factory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return viewModelInstanceCreator() as T
-        }
-    }
-)

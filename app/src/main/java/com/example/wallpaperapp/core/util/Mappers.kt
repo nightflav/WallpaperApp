@@ -1,11 +1,12 @@
-package com.example.wallpaperapp.util
+package com.example.wallpaperapp.core.util
 
 import com.example.wallpaperapp.data.dto.CategoryDto
 import com.example.wallpaperapp.data.dto.PhotoDto
 import com.example.wallpaperapp.data.network.model.photo.NetworkPhotoItem
 import com.example.wallpaperapp.data.network.model.topic.TopicNetworkItem
-import com.example.wallpaperapp.data.uimodel.CategoryItem
-import com.example.wallpaperapp.data.uimodel.PhotoItem
+import com.example.wallpaperapp.presentation.model.uimodel.CategoryItem
+import com.example.wallpaperapp.presentation.model.uimodel.LoadedImageItem
+import com.example.wallpaperapp.presentation.model.uimodel.PhotoItem
 
 val CategoryDto.categoryItem
     get() = CategoryItem(
@@ -17,7 +18,13 @@ val CategoryDto.categoryItem
 val PhotoDto.photoItem
     get() = PhotoItem(
         id = id,
-        url = url
+        uri = uri
+    )
+
+val PhotoDto.loadedImageItem
+    get() = LoadedImageItem(
+        id = id,
+        path = uri
     )
 
 val List<CategoryDto>?.categoryItemList get() = this?.map { it.categoryItem } ?: emptyList()
@@ -41,10 +48,10 @@ val List<NetworkPhotoItem>.photoDtoList
 val NetworkPhotoItem.regularPhotoDto
     get() = PhotoDto(
         id = id,
-        url = urls.full
+        uri = urls.full
     )
 
 val NetworkPhotoItem.lowResPhotoDto get() = PhotoDto(
     id = id,
-    url = urls.small
+    uri = urls.small
 )

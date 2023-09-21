@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.wallpaperapp.data.uimodel.PhotoItem
+import com.example.wallpaperapp.presentation.model.uimodel.PhotoItem
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -34,7 +34,7 @@ fun ImageCard(
             .height(320.dp)
     ) {
         GlideImage(
-            model = imageModel.url,
+            model = imageModel.uri,
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -48,7 +48,7 @@ fun ImageCardPreview() {
     ImageCard(
         imageModel = PhotoItem(
             id = "1",
-            url = "",
+            uri = "",
         )
     ) {}
 }

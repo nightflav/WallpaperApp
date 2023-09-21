@@ -1,4 +1,4 @@
-package com.example.wallpaperapp.util
+package com.example.wallpaperapp.core.util
 
 sealed class Resource<T>(val value: T?) {
     data class Error<T>(val error: Throwable, val prevState: T?) : Resource<T>(prevState)

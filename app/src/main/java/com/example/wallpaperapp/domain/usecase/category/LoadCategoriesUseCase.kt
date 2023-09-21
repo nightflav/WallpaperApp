@@ -1,15 +1,15 @@
 package com.example.wallpaperapp.domain.usecase.category
 
-import com.example.wallpaperapp.data.uimodel.CategoryItem
-import com.example.wallpaperapp.domain.repository.UnsplashRepository
-import com.example.wallpaperapp.util.Resource
-import com.example.wallpaperapp.util.categoryItemList
+import com.example.wallpaperapp.core.util.Resource
+import com.example.wallpaperapp.core.util.categoryItemList
+import com.example.wallpaperapp.presentation.model.uimodel.CategoryItem
+import com.example.wallpaperapp.domain.repository.ImagesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LoadCategoriesUseCase @Inject constructor(
-    private val repo: UnsplashRepository
+    private val repo: ImagesRepository
 ) {
 
     operator fun invoke(page: Int): Flow<Resource<List<CategoryItem>>> = repo.getCategories(page).map {

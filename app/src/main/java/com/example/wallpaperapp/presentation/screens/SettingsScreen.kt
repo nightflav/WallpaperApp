@@ -16,7 +16,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import com.example.wallpaperapp.util.THEME
+import com.example.wallpaperapp.core.util.THEME
 import kotlinx.coroutines.launch
 
 @Composable

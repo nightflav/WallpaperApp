@@ -22,11 +22,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.wallpaperapp.data.uimodel.PhotoItem
+import com.example.wallpaperapp.presentation.model.uimodel.PhotoItem
 import com.example.wallpaperapp.presentation.Destinations
 import com.example.wallpaperapp.presentation.screens.ErrorScreen
 import com.example.wallpaperapp.presentation.screens.LoadingScreen
-import com.example.wallpaperapp.util.fadingEdge
+import com.example.wallpaperapp.core.util.fadingEdge
 
 @Composable
 fun ImagesScreen(

@@ -11,10 +11,10 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wallpaperapp.core.BaseApp
+import com.example.wallpaperapp.core.util.THEME
+import com.example.wallpaperapp.core.util.dataStore
 import com.example.wallpaperapp.presentation.screens.MainNavHost
 import com.example.wallpaperapp.presentation.ui.theme.AppTheme
-import com.example.wallpaperapp.util.THEME
-import com.example.wallpaperapp.util.dataStore
 import kotlinx.coroutines.flow.map
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                         navController = navHostController,
                         modifier = Modifier.fillMaxSize(),
                         appComponent = appComponent,
-                        context = this,
+                        application = this.application,
                         dataStore = dataStore,
                         currTheme = useDarkTheme.collectAsState(initial = false).value
                     )
