@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -20,13 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.wallpaperapp.presentation.model.uimodel.PhotoItem
+import com.example.wallpaperapp.core.util.fadingEdge
 import com.example.wallpaperapp.presentation.Destinations
+import com.example.wallpaperapp.presentation.model.uimodel.PhotoItem
 import com.example.wallpaperapp.presentation.screens.ErrorScreen
 import com.example.wallpaperapp.presentation.screens.LoadingScreen
-import com.example.wallpaperapp.core.util.fadingEdge
 
 @Composable
 fun ImagesScreen(
@@ -57,7 +59,9 @@ fun ImagesScreen(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = RoundedCornerShape(15)
                 )
-                .padding(horizontal = 8.dp, vertical = 4.dp),
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
         )
         Box(
             modifier = Modifier.fadingEdge(topFade)

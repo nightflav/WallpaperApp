@@ -2,10 +2,12 @@ package com.example.wallpaperapp.presentation.screens.categoryscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -13,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,8 +48,17 @@ fun CategoryScreen(
     val state by viewModel.state.collectAsState()
     when {
         state.isLoading -> LoadingScreen()
-        state.error != null -> ErrorScreen(e = state.error!!) {
-            viewModel.sendEvent(CategoryScreenViewModel.CategoryScreenEvent.LoadCategories)
+        state.error != null -> ErrorCategoryScreen(
+            e = state.error!!,
+            { viewModel.sendEvent(CategoryScreenViewModel.CategoryScreenEvent.LoadCategories) }) {
+            Button(onClick = {
+                if (navController.currentDestination?.route != Destinations.LoadedScreen.route)
+                    navController.navigate(
+                        route = Destinations.LoadedScreen.route
+                    )
+            }) {
+                Text(text = "Show loaded images")
+            }
         }
 
         else -> SuccessfulScreen(
@@ -97,23 +110,31 @@ fun SuccessfulScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row {
-            Text(
-                text = "Select a category",
-                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = RoundedCornerShape(15)
-                    )
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
-            )
-            IconButton(onClick = onNavigateToSettingsScreen) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSecondaryContainer
+            Box {
+                Text(
+                    text = "Select a category",
+                    fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(15)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
                 )
+                IconButton(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    onClick = onNavigateToSettingsScreen
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
             }
+
         }
         CategoriesGrid(
             modifier = modifier.fadingEdge(topFade),
@@ -158,6 +179,23 @@ private fun CategoriesGrid(
                 }
             )
         }
+    }
+}
+
+@Composable
+private fun ErrorCategoryScreen(
+    e: Throwable,
+    onTryAgainClickListener: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        ErrorScreen(e = e) {
+            onTryAgainClickListener()
+        }
+        content()
     }
 }
 
